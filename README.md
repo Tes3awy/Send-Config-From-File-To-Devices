@@ -7,6 +7,8 @@
 
 This program is designed to send a set of Cisco commands to multiple network devices from text files.
 
+> This Python script was tested in a physical lab environment and on [IOS XE on CSR Latest AlwaysOn v17.3.1 Cisco DevNet Sandbox](https://devnetsandbox.cisco.com/RM/Diagram/Index/7b4d4209-a17c-4bc3-9b38-f15184e53a94?diagramType=Topology).
+
 ## Table of Contents
 
 1. [Installation](#installation)
@@ -45,7 +47,7 @@ python main.py
 **The Python script runs as following:**
 
 1. Reads IP addresses in `data/device_ip_list.txt`.
-2. Checks if those IP addresses are valid IPv4 addresses.
+2. Checks if those IP addresses are valid IPv4 addresses using built-in Python3 `ipaddress` module.
 3. Pings those IP addresses using [Ping3](https://github.com/kyan001/ping3) to check reachability.
    - If an IP address is <span style="color: red;">UNREACHABLE</span> for whatever reason, then this IP is added to `data/failure.txt` with its error message.
    - If an IP address is <span style="color: green;">REACHABLE</span>, then this IP is added to `data/success.txt`.
@@ -64,7 +66,7 @@ python main.py
 username cisco <strong>privilege 15</strong> algorithm-type scrypt secret cisco
 </pre>
 
-> This Python script neither checks enable mode nor config mode. It's left to the user to add `(conf)igure (t)erminal` in the `data/config.txt` file.
+> This Python script does not check for enable mode. It's left to the user to add the `(en)able` command at the very top in the `data/config.txt` file.
 
 ### TODO
 
