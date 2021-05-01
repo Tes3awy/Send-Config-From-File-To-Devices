@@ -1,5 +1,7 @@
 configure terminal
 !
-iox
+clock timezone UTC
+!
+lldp run
 !
 end
