@@ -50,13 +50,21 @@ def main():
     # Start time
     start_time = datetime.now().replace(microsecond=0)
 
+    # Clear filtration files
+    clear_file_contents(success_file)
+    clear_file_contents(failure_file)
+
     # Create a list from device_ip_list
     with open(file=device_ip_list, mode="r") as f:
         ip_list = list(line.strip() for line in f.readlines())
 
-    # Clear filtration files
-    clear_file_contents(success_file)
-    clear_file_contents(failure_file)
+    if not len(ip_list):
+        raise SystemExit(
+            cprint(
+                f"device_ip_list.txt is empty! Please add at least one IP address",
+                "yellow",
+            )
+        )
 
     # Ping all IP addresses to check reachability
     for ip_addr in ip_list:
