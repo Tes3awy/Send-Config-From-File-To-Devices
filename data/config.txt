@@ -1,7 +1,13 @@
-configure terminal
-!
-clock timezone UTC
+clock timezone UTC +2
 !
 lldp run
 !
-end
+spanning-tree mode rapid-pvst
+!
+no ip domain lookup
+!
+diagnostic bootup level complete
+!
+errdisable recovery cause all
+!
+errdisable recovery interval 60
