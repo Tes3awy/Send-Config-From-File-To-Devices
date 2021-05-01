@@ -1,6 +1,6 @@
 [![Tested on Python 3.9.4](https://img.shields.io/badge/Tested%20-Python%203.9.4-blue.svg?logo=python)](https://www.python.org/downloads)
 [![Contributions Welcome](https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=7206BB)]()
-[![License](https://img.shields.io/github/license/Tes3awy/Cisco-Configuration-Using-Python-Jinja-CSV)](https://github.com/Tes3awy/Cisco-Configuration-Using-Python-Jinja-CSV/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Tes3awy/Send-Config-From-File-To-Devices)](https://github.com/Tes3awy/Send-Config-From-File-To-Devices/blob/main/LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # Send Cisco Commands to Multiple Network Devices
@@ -36,6 +36,8 @@ cisco_device = {
 }
 ```
 
+**Then run:**
+
 ```python
 python main.py
 ```
@@ -44,11 +46,11 @@ python main.py
 
 1. Reads IP addresses in `data/device_ip_list.txt`.
 2. Checks if those IP addresses are valid IPv4 addresses.
-3. Pings those IP addresses to check reachability.
+3. Pings those IP addresses using [Ping3](https://github.com/kyan001/ping3) to check reachability.
    - If an IP address is <span style="color: red;">UNREACHABLE</span> for whatever reason, then this IP is added to `data/failure.txt` with its error message.
    - If an IP address is <span style="color: green;">REACHABLE</span>, then this IP is added to `data/success.txt`.
 4. Reads each IP addresse in `data/success.txt` one by one.
-5. Initiates a connection.
+5. Initiates a connection using [Netmiko](https://github.com/ktbyers/netmiko).
 6. Sends commands from `data/config.txt` to the device of that IP address.
 7. Saves the configuration on the device.
 8. Terminates the connection.
