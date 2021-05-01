@@ -1,0 +1,5 @@
+configure terminal
+!
+iox
+!
+end
