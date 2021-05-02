@@ -18,6 +18,7 @@
 import ipaddress
 import time
 from datetime import datetime, timedelta
+from getpass import getpass
 
 import ping3
 from colorama import init
@@ -61,8 +62,8 @@ def main():
     if not len(ip_list):
         raise SystemExit(
             cprint(
-                f"device_ip_list.txt is empty! Please add at least one IP address",
-                "yellow",
+                f"data/device_ip_list.txt is empty! Please add at least one IP address",
+                "red",
             )
         )
 
@@ -78,15 +79,17 @@ def main():
                 with open(file=success_file, mode="a", encoding="UTF-8") as success:
                     success.write(f"{ip_addr}\n")
             except KeyboardInterrupt:
-                cprint("Process interrupted by the user", "yellow")
+                raise SystemExit(cprint("Process interrupted by the user", "yellow"))
             except Exception as ex:
                 cprint(f"Failed to ping '{ip_addr}'. Error: {ex}\n", "red")
                 with open(file=failure_file, mode="a", encoding="UTF-8") as failure:
                     failure.write(f"Failed to ping {ip_addr}: {ex}\n")
+        except KeyboardInterrupt:
+            raise SystemExit(cprint("Process interrupted by the user", "yellow"))
         except Exception as err:
             cprint(f"'{ip_addr}' is an invalid IPv4 address\n", "red")
 
-    if check_file_status(failure_file) != 0:
+    if bool(check_file_status(failure_file)):
         cprint(
             "Please check 'data/failure.txt' to know which IP addresses that are unreacable\n",
             "yellow",
@@ -97,19 +100,25 @@ def main():
     # Pause for 2 seconds
     time.sleep(delay)
 
+    cprint(
+        "INFO: This username and password will be used for all network devices", "blue"
+    )
+
+    USERNAME = input("Username: ")
+    PASSWORD = getpass("Password: ")
+
     # Connect to IP addresses in success.txt file
     with open(file=success_file, mode="r") as success_ip_list:
         for ip_addr in success_ip_list:
             ip = ip_addr.rstrip()
 
-            cprint(f"Initiating connection to {ip}...", "magenta")
+            cprint(f"\nInitiating connection to {ip}...", "magenta")
 
             cisco_device = {
                 "device_type": "cisco_ios_telnet",
                 "ip": ip,
-                "username": "cisco",
-                "password": "cisco",
-                "verbose": True,
+                "username": USERNAME,
+                "password": PASSWORD,
             }
 
             try:
@@ -124,7 +133,7 @@ def main():
                 )
                 cprint(f"'{ip}' session disconnected successfully\n", "green")
             except KeyboardInterrupt:
-                cprint("Process interrupted by the user", "yellow")
+                raise SystemExit(cprint("Process interrupted by the user", "yellow"))
             except Exception as err:
                 cprint(f"Failed to connect to '{ip}': Error: {err}\n", "red")
 
