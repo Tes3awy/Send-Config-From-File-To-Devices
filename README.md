@@ -26,20 +26,6 @@ $ pip install -r requirements.txt
 
 ### Usage
 
-In `main.py` file, provide the `username` and `password` for `cisco_device` variable:
-
-```python
-cisco_device = {
-      "device_type": "cisco_ios_telnet", # or cisco_ios for SSH
-      "ip": ip,
-      "username": "cisco", # <---
-      "password": "cisco", # <---
-      "verbose": True,
-}
-```
-
-**Then run:**
-
 ```python
 python main.py
 ```
@@ -52,10 +38,12 @@ python main.py
    - If an IP address is <span style="color: red;">UNREACHABLE</span> for whatever reason, then this IP is added to `data/failure.txt` with its error message.
    - If an IP address is <span style="color: green;">REACHABLE</span>, then this IP is added to `data/success.txt`.
 4. Reads each IP addresse in `data/success.txt` one by one.
-5. Initiates a connection using [Netmiko](https://github.com/ktbyers/netmiko).
-6. Sends commands from `data/config.txt` to the device of that IP address.
-7. Saves the configuration on the device.
-8. Terminates the connection.
+5. Prompts the user to enter a username and a password. 
+> _These username and password will be used for all network devices of those IP addresses in `data/device_ip_list.txt`._
+6. Initiates a Telnet session to each device one by one using [Netmiko](https://github.com/ktbyers/netmiko).
+7. Sends commands from `data/config.txt` to the device of that IP address.
+8. Saves the configuration on the device.
+9. Terminates the session.
 
 ### Best Case Scenario
 
@@ -66,7 +54,7 @@ python main.py
 username cisco <strong>privilege 15</strong> algorithm-type scrypt secret cisco
 </pre>
 
-> This Python script does not check for enable mode. It's left to the user to add the `(en)able` command at the very top in the `data/config.txt` file.
+> This Python script does not check for enable mode. It's left to the user to add the `(en)able` command at the very top in the `data/config.txt` file and not set an `enable secret` command.
 
 ### TODO
 
